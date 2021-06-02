@@ -15,8 +15,8 @@ class Tracker:
     if self.gui:
       cv2.namedWindow("tracker", cv2.WINDOW_NORMAL)
 
-      cv2.createTrackbar('dilation','tracker', 1, 20, self.emptyCallback)
-      cv2.createTrackbar('erosion','tracker', 1, 20, self.emptyCallback)
+      cv2.createTrackbar('dilation','tracker', 6, 20, self.emptyCallback)
+      cv2.createTrackbar('erosion','tracker', 2, 20, self.emptyCallback)
       cv2.setMouseCallback("tracker", self.clickAndCrop)
 
     # Setup other data
@@ -105,6 +105,7 @@ class Tracker:
       self.blob_filter[name]['g_max'] = cv2.getTrackbarPos(name + '_g_max','tracker')
       self.blob_filter[name]['b_min'] = cv2.getTrackbarPos(name + '_b_min','tracker')
       self.blob_filter[name]['b_max'] = cv2.getTrackbarPos(name + '_b_max','tracker')
+    
 
   def emptyCallback(self, x):
     pass
@@ -215,7 +216,7 @@ class Tracker:
     
     return angle
 
-  def processCamera(self):
+  def processCamera(self,name):
     start = time.time()
     self.ret, self.frame = self.cam.read()
     if not self.ret:
@@ -235,6 +236,7 @@ class Tracker:
       mask, points = self.applyBlobFilter(self.frame, bf, self.dilation_size, self.erosion_size)
       self.blob_filter[bf]['points'] = points
       
+      print([name]+ points)
 
       # compute distances between blobs of the same color
       mask_bgr = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
@@ -260,6 +262,8 @@ class Tracker:
         # Show points in color image
         for p in self.blob_filter[bf]['points']:
           cv2.circle(self.frame, (p[0], p[1]), 5, (self.blob_filter[bf]['b'], self.blob_filter[bf]['g'], self.blob_filter[bf]['r']), -1)
+          #print(p[0],p[1])
+        
 
       # Update figures
       self.out_image = self.frame
@@ -268,11 +272,20 @@ class Tracker:
 
       cv2.imshow("tracker", self.out_image)
 
+
+
 def main():
   # with gui enabled
-  tracker = Tracker(gui=True,cam_index=2)
-  tracker.addColorBlob("red", r=255, g=0, b=0, r_min=0, r_max=255, g_min=0, g_max=255, b_min=0, b_max=255)
-  tracker.addColorBlob("yellow", r=255, g=255, b=0, r_min=0, r_max=255, g_min=0, g_max=255, b_min=0, b_max=255)
+  tracker1 = Tracker(gui=False,cam_index=4)
+  tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=85, r_max=105, g_min=124, g_max=255, b_min=112, b_max=160)
+  # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
+  tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+  
+  tracker2 = Tracker(gui=True,cam_index=0)
+  tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=103, r_max=135, g_min=146, g_max=255, b_min=122, b_max=160)
+  # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
+  tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+
   # with gui disabled
   # tracker = Tracker(gui=False,cam_index=2)
   # tracker.addColorBlob("red", r=255, g=0, b=0, r_min=0, r_max=255, g_min=0, g_max=255, b_min=0, b_max=255)
@@ -281,10 +294,9 @@ def main():
   # tracker.setMorphologicalOperationParameters(dilation_size=10, erosion_size=10)
 
   while True:
-    tracker.processCamera()
-    distance = tracker.getDistance("red")
-    #print("distance: %3f" %distance)
-    #angles = tracker.getAngles("red", "yellow")
-    tracker.updateVisualizations()
+    tracker1.processCamera("green1")
+    tracker1.updateVisualizations()
+    tracker2.processCamera("green2")
+    tracker2.updateVisualizations()
   
 main()
