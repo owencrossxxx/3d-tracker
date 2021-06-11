@@ -96,6 +96,9 @@ class Tracker:
     except Exception as e:
       print("Problem while computing angles: %s" %e)
     return angles
+
+  def getPoints(self,name):
+    return self.blob_filter[name]['points']
   
   def updateBlobFilterParameters(self, name):
     if self.gui:
@@ -236,7 +239,7 @@ class Tracker:
       mask, points = self.applyBlobFilter(self.frame, bf, self.dilation_size, self.erosion_size)
       self.blob_filter[bf]['points'] = points
       
-      print([name]+ points)
+      #print([name]+ points)
 
       # compute distances between blobs of the same color
       mask_bgr = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
@@ -276,12 +279,12 @@ class Tracker:
 
 def main():
   # with gui enabled
-  tracker1 = Tracker(gui=False,cam_index=4)
+  tracker1 = Tracker(gui=True,cam_index=4)
   tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=85, r_max=105, g_min=124, g_max=255, b_min=112, b_max=160)
   # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
   tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
   
-  tracker2 = Tracker(gui=True,cam_index=0)
+  tracker2 = Tracker(gui=False,cam_index=2)
   tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=103, r_max=135, g_min=146, g_max=255, b_min=122, b_max=160)
   # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
   tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
@@ -296,6 +299,8 @@ def main():
   while True:
     tracker1.processCamera("green1")
     tracker1.updateVisualizations()
+    point1 = tracker1.getPoints("green1")
+    #print(point1)
     tracker2.processCamera("green2")
     tracker2.updateVisualizations()
   
