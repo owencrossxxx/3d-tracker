@@ -307,4 +307,4 @@ def main():
     point2 = tracker2.getPoints("green2")
     print(point2)
   
-main()
+#main()
