@@ -27,7 +27,6 @@ tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=100, r_max=145, g_min=170
 # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
 tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
 
-
 # while True:
 while counter <10000:
     counter += 1
@@ -40,6 +39,15 @@ while counter <10000:
     point1 = np.asfarray(tracker1.getPoints("green1"))
     point2 = np.asfarray(tracker2.getPoints("green2"))
 
+
+    if point1 == [] or point2 == []:
+        print("No marker detected")
+        break
+
+    # if point1.size  != point2.size:
+    #     print("Not enough markers")
+    #     break
+    
     #print(point1,point2)
     #print(point1[:,1])
 
