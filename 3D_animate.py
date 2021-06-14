@@ -35,6 +35,10 @@ def animate(i):
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
+    ax.set_xlim3d(-100, 100)
+    ax.set_ylim3d(-200, 200)
+    ax.set_zlim3d(-100, 100)
+
 
     #plt.legend(loc='upper left')
     #plt.tight_layout()

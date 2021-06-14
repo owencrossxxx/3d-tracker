@@ -34,12 +34,12 @@ with open(namafile, 'w') as csv_file:
     csv_writer.writeheader()
 
 # with gui enabled
-tracker1 = Tracker(gui=True,cam_index=2)
+tracker1 = Tracker(gui=False,cam_index=2)
 tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=0, r_max=65, g_min=72, g_max=255, b_min=50, b_max=110)
 # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
 tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
 
-tracker2 = Tracker(gui=False,cam_index=0)
+tracker2 = Tracker(gui=True,cam_index=0)
 tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=0, r_max=67, g_min=86, g_max=255, b_min=84, b_max=175)
 # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
 tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
