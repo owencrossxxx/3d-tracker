@@ -27,17 +27,21 @@ def animate(i):
     #print(type(x))
     plt.cla()
 
-    #ax.plot3D(x, y, z, 'red')
+    ax.plot3D(x, y, z, 'black')
     ax.scatter(x[0], y[0], z[0], 'blue',marker='o')
     ax.scatter(x[1], y[1], z[1], 'red',marker='o')
-    ax.scatter(x[2], y[2], z[2], 'yellow',marker='o')
-    ax.scatter(x[3], y[3], z[3], 'black',marker='o')
+    ax.scatter(x[2], y[2], z[2], 'green',marker='o')
+    ax.scatter(x[3], y[3], z[3], 'yellow',marker='o')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
 
     #plt.legend(loc='upper left')
     #plt.tight_layout()
 
 
 ani = FuncAnimation(plt.gcf(), animate, interval=500)
+
 
 plt.tight_layout()
 plt.show()
