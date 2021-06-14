@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import datetime
 import random
 import pandas as pd
+from itertools import zip_longest
 
 
 from lib.tracker import Tracker
@@ -17,6 +18,10 @@ from lib.tracker import Tracker
 counter = 0
 angle = 120
 diameter = 28
+
+x_value = []
+y_value = []
+z_value = []
 
 namafile = 'data3D.csv'
 header1 = "x_value"
@@ -31,12 +36,12 @@ with open(namafile, 'w') as csv_file:
 tracker1 = Tracker(gui=True,cam_index=2)
 tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=70, r_max=111, g_min=130, g_max=255, b_min=112, b_max=200)
 # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
-tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=0)
 
 tracker2 = Tracker(gui=False,cam_index=0)
-tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=70, r_max=145, g_min=170, g_max=255, b_min=122, b_max=255)
+tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=59, r_max=145, g_min=160, g_max=255, b_min=122, b_max=255)
 # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
-tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=0)
 
 
 # while True:
@@ -79,20 +84,35 @@ while counter <10000:
         point1 = point1 - [point1_original_x,point1_original_y]
         point2 = point2 - [point2_original_x,point2_original_y]
         
-        x_value = point1[:,0]
-        y_value = point1[:,1]
-        z_value = point2[:,0]*math.cos(math.radians(angle-90))
+        x_value = x_value+point1[:,0].tolist()
+        y_value = y_value+point1[:,1].tolist()
+        z_value = z_value+(point2[:,0]*math.cos(math.radians(angle-90))).tolist()
 
-        with open(namafile, 'a') as csv_file:
-            csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        #print(point1[:,0].tolist())
+        #print(x_value)
+        
+        rows = [x_value,y_value,z_value]
 
-            info = {
-                header1: x_value,
-                header2: y_value,
-                header3: z_value
-            }
+        export_data = zip_longest(*rows, fillvalue = '')
+        with open(namafile, 'w', encoding="ISO-8859-1", newline='') as myfile:
+            wr = csv.writer(myfile)
+            wr.writerow(("x", "y","z"))
+            wr.writerows(export_data)
+        #myfile.close()
 
-            csv_writer.writerow(info)
+
+        
+
+        # with open(namafile, 'a') as csv_file:
+        #     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        #     info = {
+        #         header1: x_value,
+        #         header2: y_value,
+        #         header3: z_value
+        #     }
+
+        #     csv_writer.writerow(info)
             #print(x_value, y_value, z_value)
 
 

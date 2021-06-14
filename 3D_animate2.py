@@ -11,9 +11,9 @@ from matplotlib.animation import FuncAnimation
 ax = plt.axes(projection='3d')
 
 namafile = 'data3D.csv'
-header1 = "x_value"
-header2 = "y_value"
-header3 = "z_value"
+header1 = "x"
+header2 = "y"
+header3 = "z"
 
 index = count()
 
@@ -27,8 +27,11 @@ def animate(i):
     #print(type(x))
     plt.cla()
 
-    ax.plot3D(x, y, z, 'red')
-    ax.scatter(x, y, z, 'blue',marker='o')
+    #ax.plot3D(x, y, z, 'red')
+    ax.scatter(x[0], y[0], z[0], 'blue',marker='o')
+    ax.scatter(x[1], y[1], z[1], 'red',marker='o')
+    ax.scatter(x[2], y[2], z[2], 'yellow',marker='o')
+    ax.scatter(x[3], y[3], z[3], 'black',marker='o')
 
     #plt.legend(loc='upper left')
     #plt.tight_layout()

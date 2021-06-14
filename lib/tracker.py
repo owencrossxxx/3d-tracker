@@ -280,14 +280,14 @@ class Tracker:
 def main():
   # with gui enabled
   tracker1 = Tracker(gui=True,cam_index=2)
-  tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=70, r_max=111, g_min=150, g_max=255, b_min=112, b_max=200)
+  tracker1.addColorBlob("green1", r=0, g=255, b=0, r_min=70, r_max=111, g_min=140, g_max=255, b_min=112, b_max=200)
   # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
-  tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+  tracker1.setMorphologicalOperationParameters(dilation_size=6, erosion_size=0)
   
   tracker2 = Tracker(gui=True,cam_index=0)
-  tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=80, r_max=145, g_min=170, g_max=255, b_min=122, b_max=255)
+  tracker2.addColorBlob("green2", r=0, g=255, b=0, r_min=59, r_max=145, g_min=160, g_max=255, b_min=122, b_max=255)
   # tracker.setCroppingPoints(tl_x=20, tl_y=20, br_x=100, br_y=100) 
-  tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=2)
+  tracker2.setMorphologicalOperationParameters(dilation_size=6, erosion_size=0)
 
   # with gui disabled
   # tracker = Tracker(gui=False,cam_index=2)
